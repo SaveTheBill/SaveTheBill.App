@@ -16,14 +16,16 @@ namespace SaveTheBill.Page
     {
         private readonly FileSaver _fileSaver;
         private ObservableCollection<Bill> _billList;
-        private readonly HomePageViewModel _viewModel;
+        private readonly HomePageViewModel _homePageViewModel;
+        private readonly BillDetailPageViewModel _billDetailPageViewModel;
         private bool _noEntries = true;
 
         public HomePage()
-        {
+        {           
             _fileSaver = new FileSaver();
             BillList = new ObservableCollection<Bill>();
-            _viewModel = new HomePageViewModel();
+            _homePageViewModel = new HomePageViewModel();
+            _billDetailPageViewModel = new BillDetailPageViewModel();
             BindingContext = this;
             InitializeComponent();
         }
@@ -60,7 +62,6 @@ namespace SaveTheBill.Page
             }
 
             await FillListViewAsync();
-            StackLayoutNoEntries.IsVisible = _billList.Count == 0;
         }
 
         public async Task FillListViewAsync()
@@ -69,6 +70,8 @@ namespace SaveTheBill.Page
 
             if (json.Length > 0)
                 BillList = new ObservableCollection<Bill>(JsonConvert.DeserializeObject<IEnumerable<Bill>>(json));
+
+            StackLayoutNoEntries.IsVisible = _billList.Count == 0;
         }
 
         public async void OnDeleteItem(object sender, EventArgs e)
@@ -117,7 +120,21 @@ namespace SaveTheBill.Page
 
             var item = (Bill)mi.CommandParameter;
 
-            _viewModel.SendEmail(item);
+            _homePageViewModel.SendEmail(item);
+        }
+
+        private async void DeleteButton_OnClicked(object sender, EventArgs e)
+        {
+            var mi = ((MenuItem)sender);
+
+            if (mi == null) return;
+
+            var item = (Bill) mi.CommandParameter;
+
+            await _billDetailPageViewModel.RemoveItemFromListAsync(item);
+
+            await FillListViewAsync();
+
         }
     }
 }

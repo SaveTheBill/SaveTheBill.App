@@ -16,7 +16,9 @@
             <TextCell Text="{Binding Title}" Detail="{Binding Amount}">              
               <TextCell.ContextActions>
                 <MenuItem Clicked="ShareButton_OnClicked" CommandParameter="{Binding .}"
-                   Text="Teilen" />                
+                   Text="Teilen" />
+                <MenuItem Clicked="DeleteButton_OnClicked" CommandParameter="{Binding .}"
+                   Text="Löschen" IsDestructive="True" />
               </TextCell.ContextActions>
             </TextCell>
           </DataTemplate>

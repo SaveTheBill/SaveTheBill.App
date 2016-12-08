@@ -28,12 +28,11 @@ namespace SaveTheBill.ViewModel
         {
             var list = JsonConvert.DeserializeObject<IEnumerable<Bill>>(await _fileSaver.ReadContentFromLocalFileAsync());
             var id = 1;
-
             if ((list != null) && list.Any())
             {
                 foreach (var item in list)
                     _billList.Add(item);
-                    id = list.Count() + 1;
+                id = list.Count() + 1;
             }
 
             double cost;
@@ -54,8 +53,7 @@ namespace SaveTheBill.ViewModel
             if (oldBill != null)
             {
                 bill.Id = oldBill.Id;
-                var item = _billList.SingleOrDefault(x => x.Id == bill.Id);
-                if (item != null) _billList.Remove(item);
+                await RemoveItemFromListAsync(bill);
             }
             else
             {
@@ -63,6 +61,21 @@ namespace SaveTheBill.ViewModel
             }            
             
             _billList.Add(bill);
+
+            await _fileSaver.SaveContentToLocalFileAsync(_billList);
+        }
+
+        public async Task RemoveItemFromListAsync(Bill bill)
+        {
+            var list = JsonConvert.DeserializeObject<IEnumerable<Bill>>(await _fileSaver.ReadContentFromLocalFileAsync());
+            if ((list != null) && list.Any())
+            {
+                foreach (var listItem in list)
+                    _billList.Add(listItem);
+            }
+
+            var item = _billList.SingleOrDefault(x => x.Id == bill.Id);
+            if (item != null) _billList.Remove(item);
 
             await _fileSaver.SaveContentToLocalFileAsync(_billList);
         }

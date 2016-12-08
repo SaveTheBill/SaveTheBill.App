@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Plugin.Media.Abstractions;
+using Plugin.Messaging;
 using SaveTheBill.Infrastructure;
 using SaveTheBill.Model;
+using SaveTheBill.Resources;
 using Xamarin.Forms;
 
 namespace SaveTheBill.ViewModel

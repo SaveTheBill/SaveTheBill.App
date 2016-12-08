@@ -33,9 +33,9 @@ namespace SaveTheBill.Page
         }
 
         private async void Save_OnClicked(object sender, EventArgs e)
-        {
+        {            
             await _viewModel.Save_OnClicked(TitleEntry.Text, AmoundEntry.Text, DetailEntry.Text, GuaranteeSwitch.IsToggled,
-                GuaranteeDatePicker.Date, BuyDateEntry.Date, LocationEntry.Text, _mediaFile, _bill);           
+               GuaranteeDatePicker.Date, BuyDateEntry.Date, LocationEntry.Text, _mediaFile, _bill);           
             await Navigation.PopAsync(true);
         }
 

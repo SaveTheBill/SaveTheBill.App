@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SaveTheBill.Infrastructure;
 using SaveTheBill.Model;
+using SaveTheBill.ViewModel;
 using Xamarin.Forms;
 
 namespace SaveTheBill.Page
@@ -15,12 +16,14 @@ namespace SaveTheBill.Page
     {
         private readonly FileSaver _fileSaver;
         private ObservableCollection<Bill> _billList;
+        private readonly HomePageViewModel _viewModel;
         private bool _noEntries = true;
 
         public HomePage()
         {
             _fileSaver = new FileSaver();
             BillList = new ObservableCollection<Bill>();
+            _viewModel = new HomePageViewModel();
             BindingContext = this;
             InitializeComponent();
         }
@@ -105,6 +108,17 @@ namespace SaveTheBill.Page
         }
 
         #endregion
+
+        private void ShareButton_OnClicked(object sender, EventArgs e)
+        {
+            var mi = ((MenuItem)sender);
+
+            if (mi == null) return;
+
+            var item = (Bill)mi.CommandParameter;
+
+            _viewModel.SendEmail(item);
+        }
     }
 }
 

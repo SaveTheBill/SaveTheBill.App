@@ -13,8 +13,12 @@
       <ListView x:Name="BillListView" ItemsSource="{Binding BillList}" HasUnevenRows="True" ItemSelected="OnSelection">
         <ListView.ItemTemplate>
           <DataTemplate>
-            
-            <TextCell Text="{Binding Title}" Detail="{Binding Amount}" />
+            <TextCell Text="{Binding Title}" Detail="{Binding Amount}">              
+              <TextCell.ContextActions>
+                <MenuItem Clicked="ShareButton_OnClicked" CommandParameter="{Binding .}"
+                   Text="Teilen" />                
+              </TextCell.ContextActions>
+            </TextCell>
           </DataTemplate>
         </ListView.ItemTemplate>
       </ListView>
@@ -26,8 +30,6 @@
                    Padding="16,0">
         <Label Text="Keine Einträge" HorizontalOptions="Center" HorizontalTextAlignment="Center"
                VerticalOptions="CenterAndExpand" FontSize="22" TextColor="#D3D2D2" />
-
-
       </StackLayout>
     </AbsoluteLayout>
   </StackLayout>

@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SaveTheBill.Page.HomePage">
+             xmlns:res="clr-namespace:SaveTheBill.Resources;assembly=SaveTheBill"
+             x:Class="SaveTheBill.Page.HomePage"
+            Title="{x:Static res:AppResources.AppTitle}">
   <ContentPage.ToolbarItems>
     <ToolbarItem Clicked="AddGroupItem_OnClicked" Icon="add.png" />
   </ContentPage.ToolbarItems>
@@ -11,11 +13,12 @@
       <ListView x:Name="BillListView" ItemsSource="{Binding BillList}" HasUnevenRows="True" ItemSelected="OnSelection">
         <ListView.ItemTemplate>
           <DataTemplate>
+            
             <TextCell Text="{Binding Title}" Detail="{Binding Amount}" />
           </DataTemplate>
         </ListView.ItemTemplate>
       </ListView>
-      <StackLayout IsVisible="{Binding NoEntries}"
+      <StackLayout x:Name="StackLayoutNoEntries"
                    HorizontalOptions="FillAndExpand"
                    VerticalOptions="CenterAndExpand"
                    AbsoluteLayout.LayoutFlags="All"

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Plugin.Media.Abstractions;
 using SaveTheBill.Infrastructure;
 using SaveTheBill.Model;
 using Xamarin.Forms;
@@ -20,14 +20,18 @@ namespace SaveTheBill.ViewModel
             _billList = new List<Bill>();
             _fileSaver = new FileSaver();
         }
-        public async void Save_OnClicked(string title, string ammount, string detail, bool hasGuarantee, DateTime guaranteeDatePicker, DateTime buyDate, string location)
+
+        public async Task Save_OnClicked(string title, string ammount, string detail, bool hasGuarantee,
+            DateTime guaranteeDatePicker, DateTime buyDate, string location, string mediaFile, Bill oldBill = null)
         {
             var list = JsonConvert.DeserializeObject<IEnumerable<Bill>>(await _fileSaver.ReadContentFromLocalFileAsync());
+            var id = 1;
 
-            if (list != null && list.Any())
+            if ((list != null) && list.Any())
             {
                 foreach (var item in list)
                     _billList.Add(item);
+                    id = list.Count() + 1;
             }
 
             double cost;
@@ -41,8 +45,21 @@ namespace SaveTheBill.ViewModel
                 HasGuarantee = hasGuarantee,
                 GuaranteeExpireDate = guaranteeDatePicker,
                 ScanDate = buyDate,
-                Location = location
+                Location = location,
+                ImageSource = mediaFile
             };
+
+            if (oldBill != null)
+            {
+                bill.Id = oldBill.Id;
+                var item = _billList.SingleOrDefault(x => x.Id == bill.Id);
+                if (item != null) _billList.Remove(item);
+            }
+            else
+            {
+                bill.Id = id;
+            }            
+            
             _billList.Add(bill);
 
             await _fileSaver.SaveContentToLocalFileAsync(_billList);

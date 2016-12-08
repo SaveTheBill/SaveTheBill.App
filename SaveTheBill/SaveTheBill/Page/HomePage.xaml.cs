@@ -31,8 +31,7 @@ namespace SaveTheBill.Page
             get { return _billList; }
             set
             {
-                _billList = value;
-                NoEntries = _billList.Count == 0;
+                _billList = value;                
                 RaisePropertyChanged();
             }
         }
@@ -53,9 +52,12 @@ namespace SaveTheBill.Page
             base.OnAppearing();
 
             if (Device.OS == TargetPlatform.iOS)
+            {
                 ToolbarItems.Add(null);
+            }
 
             await FillListViewAsync();
+            StackLayoutNoEntries.IsVisible = _billList.Count == 0;
         }
 
         public async Task FillListViewAsync()
@@ -78,6 +80,9 @@ namespace SaveTheBill.Page
         {
             var listView = (ListView) sender;
             var item = ((ListView) sender).SelectedItem;
+
+            if (item == null) return;
+
             Navigation.PushAsync(new BillDetailPage((Bill)item));
             listView.SelectedItem = null;
 

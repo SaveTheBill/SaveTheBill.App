@@ -33,9 +33,9 @@ namespace SaveTheBill.Page
         {
             if (!IsValid()) return;
             await
-                _viewModel.Save_OnClicked(TitleEntry.Text, AmoundEntry.Text, CurrencyPicker.Title, CurrencyPicker.SelectedIndex, DetailEntry.Text,
+                _viewModel.Save_OnClicked(TitleEntry.Text, AmoundEntry.Text, CurrencyPicker.SelectedIndex, DetailEntry.Text,
                     GuaranteeSwitch.IsToggled,
-                    GuaranteeDatePicker.Date, BuyDateEntry.Date, LocationEntry.Text, _mediaFile, _bill);
+                    GuaranteeDatePicker.Date, NotificationTimePicker.SelectedIndex, BuyDateEntry.Date, LocationEntry.Text, _mediaFile, _bill);
             await Navigation.PopAsync(true);
         }
 
@@ -84,6 +84,7 @@ namespace SaveTheBill.Page
             DetailEntry.Text = bill.Detail;
             GuaranteeSwitch.IsToggled = bill.HasGuarantee;
             GuaranteeDatePicker.Date = bill.GuaranteeExpireDate;
+            NotificationTimePicker.SelectedIndex = bill.NotifyTime;
             BuyDateEntry.Date = bill.ScanDate;
             LocationEntry.Text = bill.Location;
             ImageEntry.Source = ImageSource.FromFile(bill.ImageSource);
@@ -96,6 +97,7 @@ namespace SaveTheBill.Page
                 var guaranteeSwitch = (Switch) sender;
 
                 GuaranteeDatePicker.IsEnabled = guaranteeSwitch.IsToggled;
+                NotificationTimePicker.IsEnabled = guaranteeSwitch.IsToggled;
             }
         }
 

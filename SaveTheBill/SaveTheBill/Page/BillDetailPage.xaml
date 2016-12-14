@@ -11,16 +11,17 @@
         <StackLayout x:Name="MainStackLayout" Orientation="Vertical" Padding="20" Spacing="20">
             <StackLayout Orientation="Horizontal">
                 <Entry x:Name="TitleEntry" Placeholder="Bezeichnung" HorizontalOptions="FillAndExpand" />
-                <Image Source="notValid.png" x:Name="ValidTitle" IsVisible="False"  HorizontalOptions="End"/>
+                <Image Source="notValid.png" x:Name="ValidTitle" IsVisible="False" HorizontalOptions="End" />
             </StackLayout>
             <StackLayout Orientation="Horizontal">
-                <Entry x:Name="AmoundEntry" Placeholder="Betrag (X.XX)" Keyboard="Numeric" HorizontalOptions="FillAndExpand" />
-                <Picker x:Name="CurrencyPicker" HorizontalOptions="End">
-                  <Picker.Items>
-                    <x:String>CHF</x:String>
-                    <x:String>€</x:String>
-                    <x:String>US $</x:String>
-                  </Picker.Items>
+                <Entry x:Name="AmoundEntry" Placeholder="Betrag (X.XX)" Keyboard="Numeric"
+                       HorizontalOptions="FillAndExpand" />
+                <Picker x:Name="CurrencyPicker" HorizontalOptions="End" Title="Währung">
+                    <Picker.Items>
+                        <x:String>CHF</x:String>
+                        <x:String>EUR</x:String>
+                        <x:String>USD</x:String>
+                    </Picker.Items>
                 </Picker>
                 <Image Source="notValid.png" x:Name="ValidAmmound" IsVisible="False" HorizontalOptions="End" />
             </StackLayout>
@@ -39,6 +40,15 @@
                     </StackLayout>
                 </StackLayout>
             </StackLayout>
+            <Picker x:Name="NotificationTimePicker" HorizontalOptions="FillAndExpand" Title="Errinnerungen">
+                <Picker.Items>
+                    <x:String>Nie</x:String>
+                    <x:String>1 Woche vor Ablauf</x:String>
+                    <x:String>2 Wochen vor Ablauf</x:String>
+                    <x:String>3 Wochen vor Ablauf</x:String>
+                    <x:String>4 Wochen vor Ablauf</x:String>
+                </Picker.Items>
+            </Picker>
             <Entry x:Name="LocationEntry" Placeholder="Ort" />
             <StackLayout VerticalOptions="Start">
                 <Label Text="Kaufdatum: " />

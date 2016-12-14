@@ -10,6 +10,7 @@ namespace SaveTheBill.Model
         public DateTime ScanDate { get; set; }
         public bool HasGuarantee { get; set; }
         public DateTime GuaranteeExpireDate { get; set; }
+        public int NotifyTime { get; set; }
         public string Location { get; set; }
     }
 }

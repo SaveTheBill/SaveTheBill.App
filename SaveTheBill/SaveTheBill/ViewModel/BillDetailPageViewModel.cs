@@ -7,7 +7,6 @@ using LocalNotifications.Plugin.Abstractions;
 using Newtonsoft.Json;
 using SaveTheBill.Infrastructure;
 using SaveTheBill.Model;
-using SaveTheBill.Resources;
 
 namespace SaveTheBill.ViewModel
 {
@@ -22,8 +21,9 @@ namespace SaveTheBill.ViewModel
             _fileSaver = new FileSaver();
         }
 
-        public async Task Save_OnClicked(string title, string ammount, string currenyValue, int currencyIndex, string detail, bool hasGuarantee,
-            DateTime guaranteeDatePicker, DateTime buyDate, string location, string mediaFile, Bill oldBill = null)
+        public async Task Save_OnClicked(string title, string ammount, int currencyIndex, string detail,
+            bool hasGuarantee,
+            DateTime guaranteeDatePicker, int notifyTime, DateTime buyDate, string location, string mediaFile, Bill oldBill = null)
         {
             var list = JsonConvert.DeserializeObject<IEnumerable<Bill>>(await _fileSaver.ReadContentFromLocalFileAsync());
             var id = 1;
@@ -32,7 +32,26 @@ namespace SaveTheBill.ViewModel
                 foreach (var item in list)
                     _billList.Add(item);
                 id = list.Count() + 1;
-            }            
+            }
+
+            IList<Currency> currenyValue = new List<Currency>
+            {
+                new Currency
+                {
+                    CurrencyIndex = 0,
+                    CurrencyValue = "CHF"
+                },
+                new Currency
+                {
+                    CurrencyIndex = 1,
+                    CurrencyValue = "EUR"
+                },
+                new Currency
+                {
+                    CurrencyIndex = 2,
+                    CurrencyValue = "USD"
+                }
+            };
 
             var bill = new Bill
             {
@@ -41,11 +60,12 @@ namespace SaveTheBill.ViewModel
                 Currency = new Currency
                 {
                     CurrencyIndex = currencyIndex,
-                    CurrencyValue = currenyValue
+                    CurrencyValue = currenyValue[currencyIndex].CurrencyValue
                 },
                 Detail = detail,
                 HasGuarantee = hasGuarantee,
                 GuaranteeExpireDate = guaranteeDatePicker,
+                NotifyTime = notifyTime,
                 ScanDate = buyDate,
                 Location = location,
                 ImageSource = mediaFile
@@ -66,19 +86,26 @@ namespace SaveTheBill.ViewModel
             await _fileSaver.SaveContentToLocalFileAsync(_billList);
 
             if (bill.HasGuarantee)
-            {
                 SetLocalNotification(bill);
-            }
         }
 
         public void SetLocalNotification(Bill bill)
         {
-            var not = CrossLocalNotifications.CreateLocalNotifier();           
+            if (bill.NotifyTime == 0) return;
+
+            var list = new List<double>
+            {
+                0, 7, 14, 21, 28
+            };                       
+
+            var not = CrossLocalNotifications.CreateLocalNotifier();
+
+            var notifyTime = bill.GuaranteeExpireDate.AddDays(-list[bill.NotifyTime]);
 
             not.Notify(new LocalNotification
             {
                 Id = bill.Id,
-                NotifyTime = bill.GuaranteeExpireDate,
+                NotifyTime = notifyTime,
                 Text = "Ihre Garantie zum Produkt " + bill.Title + "läuft ab",
                 Title = "Garantie läuft in " + (bill.GuaranteeExpireDate - DateTime.Now) + "ab"
             });
@@ -100,7 +127,7 @@ namespace SaveTheBill.ViewModel
             }
 
             await _fileSaver.SaveContentToLocalFileAsync(_billList);
-                     
+
 
             _billList.Clear();
         }

@@ -12,10 +12,10 @@ namespace SaveTheBill.ViewModel
             if (emailMessenger.CanSendEmail)
             {
                 var billText = "<b>Beschreibung: </b>" + bill.Title + "<br/>" +
-                               "<br/><b>Betrag: <b/> " + "<b>Garantie läuft ab: </b>" +
-                               (bill.HasGuarantee ? bill.GuaranteeExpireDate.ToString() : "Keine Garantie erfasst") +
-                               bill.Amount + "<br/><b>Kaufort: <b/> " +
-                               bill.Location + "<br/><b>Eingescannt am: <b/> " + bill.ScanDate;
+                               "<b>Betrag: <b/> " + bill.Amount + " " + bill.Currency.CurrencyValue + 
+                               "<br/><b>Garantie läuft ab: </b>" + (bill.HasGuarantee ? bill.GuaranteeExpireDate.ToString("dd.MM.yyyy") : "Keine Garantie erfasst") +
+                               "<br/><b>Kaufort: <b/> " + bill.Location + 
+                               "<br/><b>Eingescannt am: <b/> " + bill.ScanDate.ToString("dd.MM.yyyy");
 
                 if (bill.ImageSource == null)
                 {

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using LocalNotifications.Plugin.Abstractions;
 using Newtonsoft.Json;
 using SaveTheBill.Infrastructure;
 using SaveTheBill.Model;
@@ -26,7 +27,7 @@ namespace SaveTheBill.Page
             BillList = new ObservableCollection<Bill>();
             _homePageViewModel = new HomePageViewModel();
             _billDetailPageViewModel = new BillDetailPageViewModel();
-            BindingContext = this;
+            BindingContext = this;                        
             InitializeComponent();
         }
 
@@ -72,14 +73,6 @@ namespace SaveTheBill.Page
                 BillList = new ObservableCollection<Bill>(JsonConvert.DeserializeObject<IEnumerable<Bill>>(json));
 
             StackLayoutNoEntries.IsVisible = _billList.Count == 0;
-        }
-
-        public async void OnDeleteItem(object sender, EventArgs e)
-        {
-            var mi = (MenuItem) sender;
-            var item = (Group.BillItem) mi.CommandParameter;
-            item.Title = "(null)";
-            await _fileSaver.SaveContentToLocalFileAsync(BillList);
         }
 
         private void OnSelection(object sender, SelectedItemChangedEventArgs e)
@@ -134,7 +127,6 @@ namespace SaveTheBill.Page
             await _billDetailPageViewModel.RemoveItemFromListAsync(item);
 
             await FillListViewAsync();
-
         }
     }
 }

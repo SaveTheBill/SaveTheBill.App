@@ -62,7 +62,7 @@ namespace SaveTheBill.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die SaveTheBill ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die  SaveTheBill ähnelt.
         /// </summary>
         public static string AppTitle {
             get {

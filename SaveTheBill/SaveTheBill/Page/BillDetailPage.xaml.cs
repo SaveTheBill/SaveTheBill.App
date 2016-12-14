@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using LocalNotifications.Plugin;
-using LocalNotifications.Plugin.Abstractions;
+using System.Text.RegularExpressions;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using SaveTheBill.Model;
-using SaveTheBill.Resources;
 using SaveTheBill.ViewModel;
 using Xamarin.Forms;
 
@@ -14,7 +11,7 @@ namespace SaveTheBill.Page
 {
     public partial class BillDetailPage : ContentPage
     {
-        private readonly Bill _bill;        
+        private readonly Bill _bill;
         private readonly BillDetailPageViewModel _viewModel;
         private string _mediaFile;
 
@@ -33,35 +30,63 @@ namespace SaveTheBill.Page
         }
 
         private async void Save_OnClicked(object sender, EventArgs e)
-        {            
-            await _viewModel.Save_OnClicked(TitleEntry.Text, AmoundEntry.Text, DetailEntry.Text, GuaranteeSwitch.IsToggled,
-               GuaranteeDatePicker.Date, BuyDateEntry.Date, LocationEntry.Text, _mediaFile, _bill);           
+        {
+            if (!IsValid()) return;
+            await
+                _viewModel.Save_OnClicked(TitleEntry.Text, AmoundEntry.Text, CurrencyPicker.Title, CurrencyPicker.SelectedIndex, DetailEntry.Text,
+                    GuaranteeSwitch.IsToggled,
+                    GuaranteeDatePicker.Date, BuyDateEntry.Date, LocationEntry.Text, _mediaFile, _bill);
             await Navigation.PopAsync(true);
+        }
+
+        private bool IsValid()
+        {
+            var valid = true;
+
+            if (string.IsNullOrEmpty(TitleEntry.Text))
+            {
+                valid = false;
+                ValidTitle.IsVisible = true;
+            }
+            else
+            {
+                ValidTitle.IsVisible = false;
+            }
+
+            if (!string.IsNullOrEmpty(AmoundEntry.Text))
+            {
+                ValidAmmound.IsVisible = false;
+                if (!MatchAmmoundRegex(AmoundEntry.Text))
+                {
+                    valid = false;
+                    ValidAmmound.IsVisible = true;
+                }
+                else
+                {
+                    ValidAmmound.IsVisible = false;
+                }
+            }
+            else
+            {
+                valid = false;
+                ValidAmmound.IsVisible = true;
+            }
+
+
+            return valid;
         }
 
         private void FillDetailPage(Bill bill)
         {
             TitleEntry.Text = bill.Title;
-            AmoundEntry.Text = bill.Amount.ToString();
+            AmoundEntry.Text = bill.Amount;
+            CurrencyPicker.SelectedIndex = bill.Currency.CurrencyIndex;          
             DetailEntry.Text = bill.Detail;
             GuaranteeSwitch.IsToggled = bill.HasGuarantee;
             GuaranteeDatePicker.Date = bill.GuaranteeExpireDate;
             BuyDateEntry.Date = bill.ScanDate;
             LocationEntry.Text = bill.Location;
             ImageEntry.Source = ImageSource.FromFile(bill.ImageSource);
-        }
-
-        private void SetNotifications()
-        {
-            var notification = new LocalNotification
-            {
-                Title = NotificationResources.NotificationTitle,
-                Text = NotificationResources.NotificationText,
-                Id = 1,
-                NotifyTime = _bill.GuaranteeExpireDate
-            };
-            var notifier = CrossLocalNotifications.CreateLocalNotifier();
-            notifier.Notify(notification);
         }
 
         private void GuaranteeSwitch_OnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -127,6 +152,15 @@ namespace SaveTheBill.Page
             });
 
             indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
+        }
+
+        private bool MatchAmmoundRegex(string input)
+        {
+            var pattern = "(-?\\d{1,3}(,?\\d{3})*(\\.\\d{2}?))(\\D|$)";
+
+            var reg = new Regex(pattern);
+
+            return reg.Match(input).Success;
         }
     }
 }

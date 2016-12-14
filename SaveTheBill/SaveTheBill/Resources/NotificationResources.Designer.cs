@@ -62,11 +62,29 @@ namespace SaveTheBill.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ihre Garantie läuft bald ab ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Ihre Garantie zum Produkt  ähnelt.
         /// </summary>
-        internal static string NotificationText {
+        internal static string NotificationText1 {
             get {
-                return ResourceManager.GetString("NotificationText", resourceCulture);
+                return ResourceManager.GetString("NotificationText1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die  läuft in  ähnelt.
+        /// </summary>
+        internal static string NotificationText2 {
+            get {
+                return ResourceManager.GetString("NotificationText2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die  ab ähnelt.
+        /// </summary>
+        internal static string NotificationText3 {
+            get {
+                return ResourceManager.GetString("NotificationText3", resourceCulture);
             }
         }
         

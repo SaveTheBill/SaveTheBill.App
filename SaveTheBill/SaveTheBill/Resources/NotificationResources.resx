@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NotificationText" xml:space="preserve">
-    <value>Ihre Garantie läuft bald ab</value>
+  <data name="NotificationText1" xml:space="preserve">
+    <value>Ihre Garantie zum Produkt </value>
+  </data>
+  <data name="NotificationText2" xml:space="preserve">
+    <value> läuft in </value>
+  </data>
+  <data name="NotificationText3" xml:space="preserve">
+    <value> ab</value>
   </data>
   <data name="NotificationTitle" xml:space="preserve">
     <value>Garantie läuft ab</value>
